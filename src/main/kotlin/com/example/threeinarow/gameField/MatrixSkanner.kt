@@ -32,11 +32,12 @@ fun skanRows() {
 
             if (color1 == color2) {
                 count++
-            } else {
+            }
+            if (color1 != color2 || j==arr[0].size-1) {
                 color1 = arr[i][j].color
                 //запоминаем новый цвет
 
-                val startPoint = Pair<Int, Int> (i, j-count)
+                val startPoint = Pair<Int, Int> (i, j-count+1)
                 when(count) {
                     5 -> fiveInARow(startPoint)
                     4 -> fourInARow(startPoint)

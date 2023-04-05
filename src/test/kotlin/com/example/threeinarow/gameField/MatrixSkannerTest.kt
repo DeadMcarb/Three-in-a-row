@@ -18,7 +18,9 @@ class MatrixSkannerTest {
     @Test
     fun skanRows() {
         val expected = hashSetOf<Pair<Int, Int>>()
-        expected.add(Pair(1,2))
+        expected.add(Pair(2,0))
+        expected.add(Pair(2,1))
+        expected.add(Pair(2,2))
         scann.skanRows()
         assertEquals(expected, scann.ListOfObjectsToRemove)
     }
