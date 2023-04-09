@@ -1,4 +1,4 @@
-package com.example.threeinarow.gameFieldObjects;
+package com.example.threeinarow.gameFieldObjects.jewel;
 
 public class SimpleJewel extends Jewel {
 

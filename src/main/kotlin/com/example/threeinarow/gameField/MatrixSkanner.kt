@@ -1,18 +1,13 @@
 package com.example.threeinarow.gameField
 
-import com.example.threeinarow.gameFieldObjects.SimpleJewel
+import com.example.threeinarow.gameFieldObjects.jewel.Jewel
+import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
+import com.example.threeinarow.gameFieldObjects.jewel.special.SpecialJewel
+import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
 
 
+class MatrixSkanner(var arr: Array<Array<Jewel?>>)  {
 
-//ТУТ В КОНСТРУКТОРЕ В 2Д МАССИВЕ БЫЛ АБСТРАКТНЫЙ Jewel
-class MatrixSkanner(var arr: Array<Array<SimpleJewel>>)  {
-    val ListOfObjectsToRemove = HashSet<Pair<Int, Int>>()
-
-    //Список для удаления должен быть без повторений, чтоб было проще. ++++
-    // Надо использовать хешСет или мапу (второе лучше можно сделать как раз на цве цифры сразу?) +++++
-
-
-//    ArrayList<> ListOfObjectsToRemove;
 //    @Override
 //    public void skanColumns() {
 //
@@ -20,149 +15,129 @@ class MatrixSkanner(var arr: Array<Array<SimpleJewel>>)  {
 
 
 
-//  поиск каждым камнем соседей идёт нафиг, будет цикл
+
+    // ЗАМЕНИЛ СРАВНЕНИЕ ЦВЕТОВ СРАВНЕНИЕМ ОБЪЕКТОВ. ОСТАВИТЬ 2РАВНО ИЛИ ИКВАЛС???????? ИЛИ ЭТО ОДНО И ТО ЖЕ???
 fun skanRows() {
     for (i in arr.indices) {
-        var color1 = arr[i][0].color
+        var color1 = arr[i][0]
         var count = 1
         //на каждой новой строке задаём начальный цвет
         // и ставим счётчик на 1
         for (j in 1 until arr[0].size) {
-            val color2 = arr[i][j].color
+            val color2 = arr[i][j]
 
             if (color1 == color2) {
                 count++
             }
             if (color1 != color2 || j==arr[0].size-1) {
-                color1 = arr[i][j].color
+                color1 = arr[i][j]
                 //запоминаем новый цвет
 
                 val startPoint = Pair<Int, Int> (i, j-count+1)
                 when(count) {
-                    5 -> fiveInARow(startPoint)
-                    4 -> fourInARow(startPoint)
-                    3 -> if(createBomb(startPoint) == false) {threeInARow(startPoint)}
+                    5 -> fiveInARowHorizontally(startPoint)
+                    4 -> fourInARowHorizontally(startPoint)
+                    3 -> if(createBomb(startPoint) == false) {threeInARowHorizontally(startPoint)}
                     //Заносим 3 или больше прошлых елементов в список для удаления
                 }
             }
 
         }
     }
+        printMatrix()
 }
 
-    /// эти функции работают только по горизонтали
-    private fun createBomb(startPoint: Pair<Int, Int>): Boolean {
+    private fun printMatrix() {
+        for (i in arr.indices) {
+            for (j in arr[0].indices) {
+                if (arr[i][j] == null) print("null ") else print(" ${arr[i][j]!!.color}  ")
+            }
+            println()
+        }
+    }
 
+
+    private fun createBomb(startPoint: Pair<Int, Int>): Boolean {
         var x = startPoint.first
         var y = startPoint.second
-
-        val currentColor = arr[x][y].color
 
         //startPoint ЭТО ЖЕ ЛЕВЫЙ ВЕРХНИЙ УГОЛ??
 
-        if (currentColor ==arr[x][y+1].color && currentColor ==arr[x][y+2].color) {
-            //            arr[x][y] = null
-            //            arr[x][y] = null
-            //            arr[x][y] = null
-            ListOfObjectsToRemove.add(Pair(x,y))
-            ListOfObjectsToRemove.add(Pair(x,y+1))
-            ListOfObjectsToRemove.add(Pair(x,y+2))
-            //        arr[x][y] = Bomb(arr[x][y].color)
-            return true
-        }
-
-        if (currentColor ==arr[x][y-1].color && currentColor ==arr[x][y-2].color) {
-            //            arr[x][y] = null
-            //            arr[x][y] = null
-            //            arr[x][y] = null
-            ListOfObjectsToRemove.add(Pair(x,y))
-            ListOfObjectsToRemove.add(Pair(x,y-1))
-            ListOfObjectsToRemove.add(Pair(x,y-2))
-            //        arr[x][y] = Bomb(arr[x][y].color)
-            return true
-        }
-
-        if (currentColor ==arr[x+2][y+1].color && currentColor ==arr[x+2][y+2].color) {
-            //            arr[x][y] = null
-            //            arr[x][y] = null
-            //            arr[x][y] = null
-            ListOfObjectsToRemove.add(Pair(x+2,y))
-            ListOfObjectsToRemove.add(Pair(x+2,y+1))
-            ListOfObjectsToRemove.add(Pair(x+2,y+2))
-            //        arr[x][y] = Bomb(arr[x+2][y].color)
-            return true
-        }
-
-        if (currentColor ==arr[x+2][y-1].color && currentColor ==arr[x+2][y-2].color) {
-            //            arr[x][y] = null
-            //            arr[x][y] = null
-            //            arr[x][y] = null
-            ListOfObjectsToRemove.add(Pair(x+2,y))
-            ListOfObjectsToRemove.add(Pair(x+2,y-1))
-            ListOfObjectsToRemove.add(Pair(x+2,y-2))
-            //        arr[x][y] = Bomb(arr[x+2][y].color)
-            return true
-        }
-        return false
+        return checkForBombFunc(x, y,     x, y+1, y+2) ||
+                checkForBombFunc(x, y,    x,y-1, y-2) ||
+                checkForBombFunc(x, y,   x+2,y+1, y+2) ||
+                checkForBombFunc(x, y,   x+2,y-1, y-2)
     }
 
-    /// ТАК А ЗАЧЕМ МНЕ СПИСОК ДЛЯ УДАЛЕНИЯ, ЕСЛИ Я И ТАК МОГУ СРАЗУ НАХОДИТЬ 3 В РЯД И УДАЛЯТЬ???
+    private fun checkForBombFunc(X:Int, Y:Int, x:Int, y1:Int, y2:Int): Boolean{
+        val startPointJewel = arr[X][Y]!!
 
-    private fun threeInARow(startPoint: Pair<Int, Int>) {
+        if (y2 > arr.size-1 || y2 < 0) return false
+        // ПРОВЕРКА НА ВІХОД ЗА ГРАНИЦЫ МАТРИЦЫ
+
+        if (startPointJewel ==arr[x][y1] && startPointJewel ==arr[x][y2]) {
+            val color = startPointJewel.color
+
+            threeInARowHorizontally(Pair(X,Y))
+            deleteJevelOrWhatever(x, y1)
+            deleteJevelOrWhatever(x, y2)
+
+            arr[X][Y] = Bomb(color)
+            return true
+        } else return false
+    }
+
+    //??????????????????????????????????????????????????????????????????????????
+    private fun deleteJevelOrWhatever(x:Int, y:Int, whatToPutHere: Jewel? = null) {
+//        if (arr[x][y] is SpecialJewel) { arr[x][y].activated = true
+//        } else arr[x][y] = whatToPutHere
+
+        arr[x][y] = whatToPutHere
+    }
+
+    private fun threeInARowHorizontally(startPoint: Pair<Int, Int>) {
         var x = startPoint.first
-        var y = startPoint.second
+        val y = startPoint.second
         repeat(3) {
-            //            arr[x][y] = null
-            ListOfObjectsToRemove.add(Pair(x,y))
+            deleteJevelOrWhatever(x,y)
+//            ListOfObjectsToRemove.add(Pair(x,y))
             x++
-            y++
         }
     }
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    private fun fourInARow(startPoint: Pair<Int, Int>) {
-        var x = startPoint.first
-        var y = startPoint.second
 
-//        arr[x+1][y] = VerticalLineDestroyer(arr[x+1][y].color)
+    private fun fourInARowHorizontally(startPoint: Pair<Int, Int>) {
+        val x = startPoint.first
+        val y = startPoint.second
 
-        repeat(4) {
-//            arr[x][y] = null
-            ListOfObjectsToRemove.add(Pair(x,y))
-            x++
-            y++
-        }
+        deleteJevelOrWhatever(x,y)
+        deleteJevelOrWhatever(x+1,y, VerticalLineDestroyer(arr[x+2][y]!!.color))
+        deleteJevelOrWhatever(x+2,y)
+        deleteJevelOrWhatever(x+3,y)
+
     }
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+    private fun fiveInARowHorizontally(startPoint: Pair<Int, Int>){
+        val x = startPoint.first
+        val y = startPoint.second
 
-    private fun fiveInARow(startPoint: Pair<Int, Int>){
-        var x = startPoint.first
-        var y = startPoint.second
-
-        //        arr[x+2][y] = VerticalLineDestroyer(arr[x+2][y].color)
-
-        repeat(5) {
-            //            arr[x][y] = null  а вообще надо не просто нуль, а сделать фунцию
-            //            ремув, котрая будет ещ' делать проверку на всякие там бомбы и прочее
-
-            //            а вообще наверное всё таки лучше заносить все эти камни в список для удаления
-            //            ччтоб потом функциия ремув шла по списку и удаляла всё это на пале
-
-
-            ListOfObjectsToRemove.add(Pair(x,y))
-            x++
-            y++
-        }
+        deleteJevelOrWhatever(x,y)
+        deleteJevelOrWhatever(x+1,y)
+        deleteJevelOrWhatever(x+2,y, VerticalLineDestroyer(arr[x+3][y]!!.color))
+        deleteJevelOrWhatever(x+3,y)
+        deleteJevelOrWhatever(x+4,y)
     }
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
     //
     //Дальше цыкл по столбцам пускаем
     //
-    //Чтоб ничего не сломать по вертикали нужно заносить номера элементов для удаления в отдельный список
-    //
+
     //Будут елементы, чтоб сломать которые нужно несколько раз возле них ломать камни:
     //
-    //Мы собрали список для удаления, удаляем и ставим null
-    //
-    //Дальше каждый камень проверяет есть ли возле него null, если да,
-    // то урон засчитал и камню списано единицу прочности и его текстура становится более покоцанной
+    //Дальше каждый лёд проверяет есть ли возле него null, если да,
+    // то урон засчитал и дьду списано единицу прочности и его текстура становится более покоцанной
 }

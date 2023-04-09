@@ -1,6 +1,6 @@
 package com.example.threeinarow.gameField;
 
-import com.example.threeinarow.gameFieldObjects.Jewel;
+import com.example.threeinarow.gameFieldObjects.jewel.Jewel;
 
 public class GameField {
 

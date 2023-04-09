@@ -1,4 +1,4 @@
-package com.example.threeinarow.gameFieldObjects;
+package com.example.threeinarow.gameFieldObjects.jewel;
 
 public abstract class Jewel {
     private String color;
@@ -19,6 +19,9 @@ public abstract class Jewel {
         if (o == this) {
             return true;
         }
+
+        if (o == null)
+            return false;
 
         /* Check if o is an instance of Jewel or not
           "null instanceof [type]" also returns false */

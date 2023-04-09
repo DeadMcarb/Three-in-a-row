@@ -1,27 +1,30 @@
 package com.example.threeinarow.gameField
 
-import com.example.threeinarow.gameFieldObjects.SimpleJewel
+import com.example.threeinarow.gameFieldObjects.jewel.Jewel
+import com.example.threeinarow.gameFieldObjects.jewel.SimpleJewel
+import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 
 class MatrixSkannerTest {
 
-        val matrix = arrayOf(
-            arrayOf(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("R")),
-            arrayOf(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("W")),
-            arrayOf(SimpleJewel("B"), SimpleJewel("B"), SimpleJewel("B")) )
+    val matrix = arrayOf(
+        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("B"), SimpleJewel("B")),
+        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("W")),
+        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("R")) )
 
         val scann = MatrixSkanner(this.matrix)
 
 
     @Test
     fun skanRows() {
-        val expected = hashSetOf<Pair<Int, Int>>()
-        expected.add(Pair(2,0))
-        expected.add(Pair(2,1))
-        expected.add(Pair(2,2))
+        val expected = arrayOf(
+            arrayOf<Jewel?>(Bomb("B"), null, null),
+            arrayOf<Jewel?>(null, SimpleJewel("R"), SimpleJewel("W")),
+            arrayOf<Jewel?>(null, SimpleJewel("R"), SimpleJewel("R")) )
         scann.skanRows()
-        assertEquals(expected, scann.ListOfObjectsToRemove)
+        assertArrayEquals(expected, matrix)
     }
 }
+
