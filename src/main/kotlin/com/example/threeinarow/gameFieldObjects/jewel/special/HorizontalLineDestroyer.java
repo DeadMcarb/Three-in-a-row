@@ -7,7 +7,7 @@ public class HorizontalLineDestroyer extends SpecialJewel{
     }
 
     @Override
-    void action() {
+    public void action() {
 
     }
 }

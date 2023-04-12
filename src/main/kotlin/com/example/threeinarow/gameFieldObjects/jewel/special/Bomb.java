@@ -6,7 +6,7 @@ public class Bomb extends SpecialJewel{
     }
 
     @Override
-    void action() {
+    public void action() {
 
     }
     //3 на 3 уголок - бомба взрывает 3 на 3

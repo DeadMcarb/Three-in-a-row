@@ -6,7 +6,7 @@ public class VerticalLineDestroyer extends SpecialJewel {
     }
 
     @Override
-    void action() {
+    public void action() {
 
     }
 

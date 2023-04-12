@@ -6,7 +6,7 @@ public class SameColorDestroyer extends SpecialJewel{
     }
 
     @Override
-    void action() {
+    public void action() {
 
     }
 

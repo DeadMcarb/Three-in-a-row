@@ -1,8 +1,7 @@
-package com.example.threeinarow.gameField;
+package com.example.threeinarow.gameField
 
-public interface InterfaceMatrixSkanner {
-
-//    void skanColumns();
-//    void skanRows();
+interface InterfaceMatrixSkanner {
+    fun skanColumns()
+    fun skanRows()
 //      НАДО ЕЩЁ ФУНКЦИЮ ДЛЯ ГЕНЕРАЦИИ РАНДОМНЫХ КАМНЕЙ И ПОПУТНОГО ОПУСКАНИЯ ИХ ВНИЗ
 }
