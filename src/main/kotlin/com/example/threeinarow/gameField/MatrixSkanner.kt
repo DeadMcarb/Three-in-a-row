@@ -9,43 +9,9 @@ import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestro
 
 
 class MatrixSkanner(var arr: Array<Array<Jewel?>>) : InterfaceMatrixSkanner {
-    override fun skanColumns() {
-        for (i in arr.indices) {
-            var color1 = arr[0][i]
-            var count = 1
-            //на каждой новой строке задаём начальный цвет
-            // и ставим счётчик на 1
 
-            for (j in 1 until arr[0].size) {
-                val color2 = arr[j][i]
-
-                //если камень такой же, то идём дальше
-                if (color1 == color2) {
-                    count++
-
-                    //если дошли до конца строки, то делаем проверку
-                    if (j==arr.size-1) {       ///++
-                        val startPoint = Pair(i, j-count+1) /////???????????????????
-                        howManyInRow(count, startPoint)
-                    }
-                }
-
-                // если цвета разные
-                else {
-                    //делаем проверку
-                    val startPoint = Pair(i, j-count)     /////???????????????????
-                    howManyInRow(count, startPoint)
-
-                    // запоминаем новый цвет
-                    color1 = arr[i][j]
-                    count = 1
-                }
-            }
-        }
-        printMatrix()
-    }
 ////////////////////////////////////////////////////////////////////////////
-    fun skanColumns1() {
+override fun skanColumns() {
 //        for (j in arr.indices) {
 //            for (i in arr[0].indices) {
 //                println(arr[i][j])
@@ -258,9 +224,6 @@ class MatrixSkanner(var arr: Array<Array<Jewel?>>) : InterfaceMatrixSkanner {
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-    //
-    //Дальше цыкл по столбцам пускаем
-    //
 
     //Будут елементы, чтоб сломать которые нужно несколько раз возле них ломать камни:
     //

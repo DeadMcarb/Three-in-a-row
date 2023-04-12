@@ -27,7 +27,7 @@ class MatrixSkannerTest {
             arrayOf<Jewel?>(null, SimpleJewel("R"), SimpleJewel("W")),
             arrayOf<Jewel?>(null, SimpleJewel("R"), SimpleJewel("R")) )
         scann.skanRows()
-        scann.skanColumns1()
+        scann.skanColumns()
         assertArrayEquals(expected, matrix)
     }
 
