@@ -1,7 +1,7 @@
 package com.example.threeinarow.gameFieldObjects.jewel.special;
 
 public class SameColorDestroyer extends SpecialJewel{
-    public SameColorDestroyer(String color) {
+    public SameColorDestroyer(char color) {
         super(color);
     }
 

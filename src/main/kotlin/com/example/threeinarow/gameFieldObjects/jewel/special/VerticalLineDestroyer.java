@@ -1,7 +1,7 @@
 package com.example.threeinarow.gameFieldObjects.jewel.special;
 
 public class VerticalLineDestroyer extends SpecialJewel {
-    public VerticalLineDestroyer(String color) {
+    public VerticalLineDestroyer(char color) {
         super(color);
     }
 

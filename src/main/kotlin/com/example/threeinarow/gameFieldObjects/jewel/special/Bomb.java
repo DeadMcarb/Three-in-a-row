@@ -1,7 +1,7 @@
 package com.example.threeinarow.gameFieldObjects.jewel.special;
 
 public class Bomb extends SpecialJewel{
-    public Bomb(String color) {
+    public Bomb(char color) {
         super(color);
     }
 

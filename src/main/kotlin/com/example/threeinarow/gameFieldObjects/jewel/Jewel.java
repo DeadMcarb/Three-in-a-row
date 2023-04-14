@@ -1,13 +1,27 @@
 package com.example.threeinarow.gameFieldObjects.jewel;
 
-public abstract class Jewel {
-    private String color;
+import static com.example.threeinarow.gameFieldObjects.jewel.Colors.*;
 
-    public Jewel(String color) {
+public abstract class Jewel {
+    private char color;
+
+    private String texture;
+
+    public Jewel(char color) {
         this.color = color;
+        switch (color) {
+            case RED -> texture = "D:\\IdeaProjects\\Three-in-a-row\\src\\main\\kotlin\\com\\example\\threeinarow\\textures\\Red.png";
+            case BlUE -> texture = "D:\\IdeaProjects\\Three-in-a-row\\src\\main\\kotlin\\com\\example\\threeinarow\\textures\\Blue.png";
+            case GREEN -> texture = "D:\\IdeaProjects\\Three-in-a-row\\src\\main\\kotlin\\com\\example\\threeinarow\\textures\\Green.png";
+            case YELLOW -> texture = "D:\\IdeaProjects\\Three-in-a-row\\src\\main\\kotlin\\com\\example\\threeinarow\\textures\\Yellow.png";
+        }
     }
 
-    public String getColor() {
+    public String getTexture() {
+        return texture;
+    }
+
+    public char getColor() {
         return color;
     }
 
@@ -33,7 +47,7 @@ public abstract class Jewel {
         Jewel c = (Jewel) o;
 
         // Compare the data members and return accordingly
-        return color.equals(c.getColor());
+        return  color == c.color;
     }
 
 }

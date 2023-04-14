@@ -1,4 +1,4 @@
-package com.example.threeinarow.gameField
+package com.example.threeinarow.gameField.logic
 
 import com.example.threeinarow.gameFieldObjects.jewel.Jewel
 import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
@@ -8,16 +8,69 @@ import com.example.threeinarow.gameFieldObjects.jewel.special.SpecialJewel
 import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
 
 
-class MatrixSkanner(var arr: Array<Array<Jewel?>>) : InterfaceMatrixSkanner {
+class MatrixScanner(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixScanner {
 
-////////////////////////////////////////////////////////////////////////////
-override fun skanColumns() {
-//        for (j in arr.indices) {
-//            for (i in arr[0].indices) {
-//                println(arr[i][j])
-//            }
-//        }
+//    public comboCounter: Int = 0
 
+
+    ////////////////////////////////////////////////////////////////////////////
+    override fun fullScan() {
+        //1)Меняю камни местами
+        swapTwoJewels()
+        // НАДО ЕЩЁ ВЫЗВАТЬ ФУНКЦИЮ РИСОВАНИЯ ДЛЯ ЭТОГО ДЕЙСТВИЯ
+
+        //2)Функ. Проверки по вертикали и горизонтали. Выставление где надо activate = true
+        scanRows()
+        scanColumns()
+        // Надо чтоб они меняли счётчик комбо и возвращали булевское значение, отработали они или нет
+        // ЕСЛИ КРУГОМ ФОЛС, ТО ОТРИСОВАТЬ ПЕРВЫЙ ПУНКТ ВСПЯТЬ, А ИНАЧЕ:
+
+        //3) Отрисовка
+
+
+        //4)Потом сканирую на наличие null значения,
+        //если оно есть, то вызываю функ. Опускания и создания рандомных, и отрисовку
+
+        activateSpecialJewels()
+        //5) Срабатывание бомбы
+    }
+
+
+
+
+
+
+
+    override fun swapTwoJewels() {
+        //firstJewel :Pair<Int, Int>, secondJewel :Pair<Int, Int>
+        // ЕСЛИ МЕНЯЮТСЯ МЕСТАМИ ДВА СПЕЦИАЛЬНЫХ, ТО ДОЛЖНА БЫТЬ ИХ ОСОБЕННАЯ АКТИВАЦИЯ, потом падение вниз
+        TODO("Not yet implemented")
+    }
+
+    override fun containsNull():Boolean { //+++++++++++++++++++++++++++++++++++++++
+        for (i in arr.indices) {
+            for (j in arr[0].indices) {
+                if (arr[i][j]==null) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    override fun activateSpecialJewels() {
+        TODO("Not yet implemented")
+    }
+
+    override fun fallDown() {
+        TODO("Not yet implemented")
+    }
+
+    override fun randomJewelGeneration() {
+        TODO("Not yet implemented")
+    }
+
+    override fun scanColumns() {
         for (j in arr[0].indices) {         //////////////+++++
             var color1 = arr[0][j]                //////////////+++++
             var count = 1
@@ -62,7 +115,7 @@ override fun skanColumns() {
 
     private fun threeInARowVertically(startPoint: Pair<Int, Int>) {
         var i = startPoint.first
-        var j = startPoint.second
+        val j = startPoint.second
         repeat(3) {
             deleteJevelOrWhatever(i,j)
             i++
@@ -91,7 +144,7 @@ override fun skanColumns() {
         deleteJevelOrWhatever(i+4,j)
     }
 
-    override fun skanRows() {
+    override fun scanRows() {
 
     for (i in arr.indices) {
         var color1 = arr[i][0]

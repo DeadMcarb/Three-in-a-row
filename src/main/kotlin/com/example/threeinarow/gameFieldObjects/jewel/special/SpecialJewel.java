@@ -6,7 +6,7 @@ public abstract class SpecialJewel extends Jewel {
     private boolean activated;
 
 
-    public SpecialJewel(String color) {
+    public SpecialJewel(char color) {
         super(color);
         this.activated = false;
     }
