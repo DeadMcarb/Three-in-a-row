@@ -5,6 +5,7 @@ interface InterfaceGameView {
 
     fun drawGameField()
 
+    fun highlightJewel()
     fun drawOneJewel()
     fun drawScore()
 

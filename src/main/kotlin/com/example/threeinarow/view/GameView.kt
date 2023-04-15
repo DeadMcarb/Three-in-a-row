@@ -8,6 +8,8 @@ import kotlin.math.min
 
 
 class GameView(val game: GameField, val canvas: Canvas): InterfaceGameView {
+
+     var jewelPixelSize = 0.0
     override fun draw() {
         clear()
 
@@ -17,21 +19,16 @@ class GameView(val game: GameField, val canvas: Canvas): InterfaceGameView {
     override fun drawGameField() {
         val arr = game.jewelArray
         val gc = canvas.graphicsContext2D
-        game.horizontalSize
-        game.verticalSize
-        canvas.width
-        canvas.height
 
         val imageWidth = canvas.width/game.horizontalSize
         val imageHeight = canvas.height/game.verticalSize
-        // min
 
-        val imageSize = min(imageWidth, imageHeight)
+        jewelPixelSize = min(imageWidth, imageHeight)
 
         for (i in arr.indices) {
             for (j in arr[0].indices) {
                 gc.drawImage(Image(arr[i][j].texture),
-                    j*imageSize, i*imageSize, imageSize, imageSize)
+                    j*jewelPixelSize, i*jewelPixelSize, jewelPixelSize, jewelPixelSize)
 
             }
         }
@@ -40,6 +37,10 @@ class GameView(val game: GameField, val canvas: Canvas): InterfaceGameView {
 
     override fun drawOneJewel() {
 
+    }
+
+    override fun highlightJewel() {
+        TODO("Not yet implemented")
     }
 
     override fun drawScore() {

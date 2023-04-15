@@ -2,7 +2,9 @@ package com.example.threeinarow
 
 import com.example.threeinarow.gameField.GameField
 import com.example.threeinarow.gameField.logic.InterfaceMatrixScanner
+import com.example.threeinarow.gameField.logic.InterfaceMouseProcessor
 import com.example.threeinarow.gameField.logic.MatrixScanner
+import com.example.threeinarow.gameField.logic.MouseProcessor
 import com.example.threeinarow.gameFieldObjects.jewel.Jewel
 import com.example.threeinarow.gameFieldObjects.jewel.SimpleJewel
 import com.example.threeinarow.view.GameView
@@ -13,6 +15,7 @@ import javafx.scene.layout.Pane
 
 ///ИМПОРТ ЦВЕТОВ СИМВОЛЬНЫХ
 import com.example.threeinarow.gameFieldObjects.jewel.Colors.*
+import javafx.scene.input.MouseButton
 
 class GameController {
 
@@ -25,6 +28,7 @@ class GameController {
     private lateinit var game: GameField
     private lateinit var view: GameView
     private lateinit var matixScanner: InterfaceMatrixScanner
+    private lateinit var mouseProcessor: InterfaceMouseProcessor
 
     var matrix = arrayOf(
         arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(BlUE), SimpleJewel(BlUE), SimpleJewel(BlUE)),
@@ -50,12 +54,14 @@ class GameController {
         ///////////////////////
         view.drawGameField()
 
+        mouseProcessor = MouseProcessor(game, view)
+
+
     }
 
     fun processMouseClick(mouseEvent: MouseEvent) {
-        if (mouseEvent.isPrimaryButtonDown) {
-            println(mouseEvent.x)
-            println(mouseEvent.y)
+        if (mouseEvent.button == MouseButton.PRIMARY) {
+            mouseProcessor.process(mouseEvent.x, mouseEvent.y)
         }
     }
 
@@ -65,7 +71,9 @@ class GameController {
         matixScanner.fullScan()
     }
 
-
+//    fun processKey(keyEvent: KeyEvent) {
+//        println(keyEvent.code)
+//    }
 
 
 }
