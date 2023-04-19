@@ -1,13 +1,14 @@
 package com.example.threeinarow
 
-import com.example.threeinarow.gameField.GameField
-import com.example.threeinarow.gameField.logic.InterfaceMatrixScanner
-import com.example.threeinarow.gameField.logic.InterfaceMouseProcessor
-import com.example.threeinarow.gameField.logic.MatrixScanner
-import com.example.threeinarow.gameField.logic.MouseProcessor
+import com.example.threeinarow.game.Game
+import com.example.threeinarow.game.GameField
+import com.example.threeinarow.game.logic.InterfaceMatrixProcessor
+import com.example.threeinarow.game.logic.InterfaceMouseProcessor
+import com.example.threeinarow.game.logic.MatrixProcessor
+import com.example.threeinarow.game.logic.MouseProcessor
 import com.example.threeinarow.gameFieldObjects.jewel.Jewel
 import com.example.threeinarow.gameFieldObjects.jewel.SimpleJewel
-import com.example.threeinarow.view.GameView
+import com.example.threeinarow.view.GameFieldFieldView
 import javafx.fxml.FXML
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
@@ -25,9 +26,10 @@ class GameController {
     @FXML
     private lateinit var pane: Pane
 
-    private lateinit var game: GameField
-    private lateinit var view: GameView
-    private lateinit var matixScanner: InterfaceMatrixScanner
+    private lateinit var game: Game
+    private lateinit var gameField: GameField
+    private lateinit var view: GameFieldFieldView
+    private lateinit var matixScanner: InterfaceMatrixProcessor
     private lateinit var mouseProcessor: InterfaceMouseProcessor
 
     var matrix = arrayOf(
@@ -40,11 +42,14 @@ class GameController {
         canvas.widthProperty().bind(pane.widthProperty())
         canvas.heightProperty().bind(pane.heightProperty())
 
-//        game = GameField()/////////////////////////////////////////
-        game = GameField(5, 4 , 3000, matrix)
+//        game = Game()/////////////////////////////////////////
+        gameField = GameField(matrix.size,matrix[0].size, matrix)
+        game = Game(gameField, 1500)
         //////////////////////////////////////////////////////////////////////
-        view = GameView(game, canvas)
-        matixScanner = MatrixScanner(game.jewelArray)
+        view = GameFieldFieldView(gameField, canvas)
+        matixScanner = MatrixProcessor(gameField.jewelArray)
+
+
 
         canvas.widthProperty().addListener { _ -> view.draw() }
         canvas.heightProperty().addListener { _ -> view.draw() }
@@ -54,7 +59,7 @@ class GameController {
         ///////////////////////
         view.drawGameField()
 
-        mouseProcessor = MouseProcessor(game, view)
+        mouseProcessor = MouseProcessor(gameField, view, matixScanner)
 
 
     }

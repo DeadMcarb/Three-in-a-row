@@ -1,23 +1,31 @@
 package com.example.threeinarow.gameFieldObjects.jewel;
 
+import javafx.scene.image.Image;
+import lombok.SneakyThrows;
+
+import java.io.FileInputStream;
 import static com.example.threeinarow.gameFieldObjects.jewel.Colors.*;
 
 public abstract class Jewel {
     private char color;
 
-    private String texture;
+    private Image texture;
+//    private String texture;
 
+
+    @SneakyThrows
     public Jewel(char color) {
         this.color = color;
         switch (color) {
-            case RED -> texture = "D:\\IdeaProjects\\Three-in-a-row\\src\\main\\kotlin\\com\\example\\threeinarow\\textures\\Red.png";
-            case BlUE -> texture = "D:\\IdeaProjects\\Three-in-a-row\\src\\main\\kotlin\\com\\example\\threeinarow\\textures\\Blue.png";
-            case GREEN -> texture = "D:\\IdeaProjects\\Three-in-a-row\\src\\main\\kotlin\\com\\example\\threeinarow\\textures\\Green.png";
-            case YELLOW -> texture = "D:\\IdeaProjects\\Three-in-a-row\\src\\main\\kotlin\\com\\example\\threeinarow\\textures\\Yellow.png";
+
+            case RED -> texture = new Image(new FileInputStream("textures\\Red.png"));
+            case BlUE -> texture = new Image(new FileInputStream("textures\\Blue.png"));
+            case GREEN -> texture = new Image(new FileInputStream("textures\\Green.png"));
+            case YELLOW -> texture = new Image(new FileInputStream("textures\\Yellow.png"));
         }
     }
 
-    public String getTexture() {
+    public Image getTexture() {
         return texture;
     }
 

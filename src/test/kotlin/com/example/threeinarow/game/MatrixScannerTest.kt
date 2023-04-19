@@ -1,12 +1,4 @@
-package com.example.threeinarow.gameField
-
-import com.example.threeinarow.gameField.logic.MatrixScanner
-import com.example.threeinarow.gameFieldObjects.jewel.Jewel
-import com.example.threeinarow.gameFieldObjects.jewel.SimpleJewel
-import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+package com.example.threeinarow.game
 
 class MatrixScannerTest {
 
@@ -17,7 +9,7 @@ class MatrixScannerTest {
 //        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("W"), SimpleJewel("B")),
 //        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("R"), SimpleJewel("B")) )
 //
-//        val scann = MatrixScanner(this.matrix)
+//        val scann = MatrixProcessor(this.matrix)
 
 
 
@@ -39,7 +31,7 @@ class MatrixScannerTest {
 //            arrayOf<Jewel?>(null, SimpleJewel("R"), SimpleJewel("W")),
 //            arrayOf<Jewel?>(null, SimpleJewel("R"), SimpleJewel("R")) )
 //
-//        val scann = MatrixScanner(newMatrix)
+//        val scann = MatrixProcessor(newMatrix)
 //
 //        val expected = scann.containsNull()
 //        assertEquals(expected, true)

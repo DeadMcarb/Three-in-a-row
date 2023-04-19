@@ -1,4 +1,4 @@
-package com.example.threeinarow.gameField.logic
+package com.example.threeinarow.game.logic
 
 import com.example.threeinarow.gameFieldObjects.jewel.Jewel
 import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
@@ -8,15 +8,29 @@ import com.example.threeinarow.gameFieldObjects.jewel.special.SpecialJewel
 import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
 
 
-class MatrixScanner(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixScanner {
+class MatrixProcessor(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixProcessor {
 
 //    public comboCounter: Int = 0
 
 
     ////////////////////////////////////////////////////////////////////////////
+    override fun swapTwoJewels(firstJewel :Pair<Int, Int>, secondJewel :Pair<Int, Int>) {
+        val i1 = firstJewel.first
+        val j1 = firstJewel.second
+        val i2 = secondJewel.first
+        val j2 = secondJewel.second
+
+        arr[i1][j1] = arr [i2][j2].also { arr[i2][j2] = arr [i1][j1] }
+
+
+        // ЕСЛИ МЕНЯЮТСЯ МЕСТАМИ ДВА СПЕЦИАЛЬНЫХ, ТО ДОЛЖНА БЫТЬ ИХ ОСОБЕННАЯ АКТИВАЦИЯ, потом падение вниз
+//        fullScan()
+    }
+
+
+
     override fun fullScan() {
         //1)Меняю камни местами
-        swapTwoJewels()
         // НАДО ЕЩЁ ВЫЗВАТЬ ФУНКЦИЮ РИСОВАНИЯ ДЛЯ ЭТОГО ДЕЙСТВИЯ
 
         //2)Функ. Проверки по вертикали и горизонтали. Выставление где надо activate = true
@@ -38,14 +52,6 @@ class MatrixScanner(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixScan
 
 
 
-
-
-
-    override fun swapTwoJewels() {
-        //firstJewel :Pair<Int, Int>, secondJewel :Pair<Int, Int>
-        // ЕСЛИ МЕНЯЮТСЯ МЕСТАМИ ДВА СПЕЦИАЛЬНЫХ, ТО ДОЛЖНА БЫТЬ ИХ ОСОБЕННАЯ АКТИВАЦИЯ, потом падение вниз
-        TODO("Not yet implemented")
-    }
 
     override fun containsNull():Boolean { //+++++++++++++++++++++++++++++++++++++++
         for (i in arr.indices) {

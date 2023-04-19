@@ -1,4 +1,4 @@
-package com.example.threeinarow.gameField.logic
+package com.example.threeinarow.game.logic
 
 interface InterfaceMouseProcessor {
     fun process(x:Double, y:Double)

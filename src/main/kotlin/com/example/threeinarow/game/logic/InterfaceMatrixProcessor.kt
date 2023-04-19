@@ -1,6 +1,6 @@
-package com.example.threeinarow.gameField.logic
+package com.example.threeinarow.game.logic
 
-interface InterfaceMatrixScanner {
+interface InterfaceMatrixProcessor {
 
     fun fullScan()
     fun scanColumns()
@@ -11,6 +11,6 @@ interface InterfaceMatrixScanner {
     fun containsNull () :Boolean
     fun fallDown ()
     fun randomJewelGeneration()
-    fun swapTwoJewels ()
+    fun swapTwoJewels (firstJewel :Pair<Int, Int>, secondJewel :Pair<Int, Int>)
 //      НАДО ЕЩЁ ФУНКЦИЮ ДЛЯ ГЕНЕРАЦИИ РАНДОМНЫХ КАМНЕЙ И ПОПУТНОГО ОПУСКАНИЯ ИХ ВНИЗ
 }

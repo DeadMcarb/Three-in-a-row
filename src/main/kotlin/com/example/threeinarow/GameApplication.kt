@@ -9,7 +9,7 @@ class HelloApplication : Application() {
     override fun start(stage: Stage) {
         val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("hello-view.fxml"))
         val scene = Scene(fxmlLoader.load(), 620.0, 440.0)
-        stage.title = "Hello!"
+        stage.title = "Jewel may cry"
         stage.scene = scene
         stage.show()
     }
