@@ -1,14 +1,20 @@
 package com.example.threeinarow.game.logic
 
+import com.example.threeinarow.gameFieldObjects.jewel.Colors
 import com.example.threeinarow.gameFieldObjects.jewel.Jewel
+import com.example.threeinarow.gameFieldObjects.jewel.SimpleJewel
 import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
 import com.example.threeinarow.gameFieldObjects.jewel.special.HorizontalLineDestroyer
 import com.example.threeinarow.gameFieldObjects.jewel.special.SameColorDestroyer
 import com.example.threeinarow.gameFieldObjects.jewel.special.SpecialJewel
 import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
+import com.example.threeinarow.view.GameFieldFieldView
 
 
-class MatrixProcessor(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixProcessor {
+class MatrixProcessor(
+    private var arr: Array<Array<Jewel?>>,
+    private val view: GameFieldFieldView)
+    : InterfaceMatrixProcessor {
 
 //    public comboCounter: Int = 0
 
@@ -24,7 +30,7 @@ class MatrixProcessor(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixPr
 
 
         // ЕСЛИ МЕНЯЮТСЯ МЕСТАМИ ДВА СПЕЦИАЛЬНЫХ, ТО ДОЛЖНА БЫТЬ ИХ ОСОБЕННАЯ АКТИВАЦИЯ, потом падение вниз
-//        fullScan()
+        fullScan()
     }
 
 
@@ -45,8 +51,10 @@ class MatrixProcessor(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixPr
         //4)Потом сканирую на наличие null значения,
         //если оно есть, то вызываю функ. Опускания и создания рандомных, и отрисовку
 
-        activateSpecialJewels()
+//        activateSpecialJewels()
         //5) Срабатывание бомбы
+
+        fallDown()
     }
 
 
@@ -69,11 +77,29 @@ class MatrixProcessor(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixPr
     }
 
     override fun fallDown() {
-        TODO("Not yet implemented")
+        for (j in arr[0].indices) {
+            for (i in arr.indices.reversed()) {
+                //если найдена пустота
+                if (arr[i][j] == null) {
+
+                    while (arr[i][j] == null) {
+                        // опускание вниз по одному всех элементов, что были выше пустоты
+                        for (e in i downTo 1) {
+                            arr[e][j] = arr[e - 1][j]
+                        }
+                        // спавн нового камня вверху столбца
+                        arr[0][j] = randomJewelGeneration()
+
+                    }
+                }
+            }
+        }
+
     }
 
-    override fun randomJewelGeneration() {
-        TODO("Not yet implemented")
+    override fun randomJewelGeneration(): Jewel {
+
+        return SimpleJewel(Colors.getRandomColor())
     }
 
     override fun scanColumns() {
@@ -197,7 +223,7 @@ class MatrixProcessor(private var arr: Array<Array<Jewel?>>) : InterfaceMatrixPr
         }
     }
 
-    private fun printMatrix() {
+    public fun printMatrix() {
         for (i in arr.indices) {
             for (j in arr[0].indices) {
                 if (arr[i][j] == null) print("null ") else print(" ${arr[i][j]!!.color}   ")

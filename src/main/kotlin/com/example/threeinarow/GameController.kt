@@ -18,6 +18,7 @@ import javafx.scene.layout.Pane
 import com.example.threeinarow.gameFieldObjects.jewel.Colors.*
 import javafx.scene.input.MouseButton
 
+
 class GameController {
 
     @FXML
@@ -51,13 +52,13 @@ class GameController {
 
 
 
-        canvas.widthProperty().addListener { _ -> view.draw() }
-        canvas.heightProperty().addListener { _ -> view.draw() }
+        canvas.widthProperty().addListener { _ -> view.update() } // добавить сюда абдейт и других вьювов
+        canvas.heightProperty().addListener { _ -> view.update() }
 
         pane.requestFocus()
 
         ///////////////////////
-        view.drawGameField()
+        view.update()
 
         mouseProcessor = MouseProcessor(gameField, view, matixScanner)
 
@@ -69,16 +70,6 @@ class GameController {
             mouseProcessor.process(mouseEvent.x, mouseEvent.y)
         }
     }
-
-
-    fun aaaaaaaaaaaaaa () {
-        ///
-        matixScanner.fullScan()
-    }
-
-//    fun processKey(keyEvent: KeyEvent) {
-//        println(keyEvent.code)
-//    }
 
 
 }

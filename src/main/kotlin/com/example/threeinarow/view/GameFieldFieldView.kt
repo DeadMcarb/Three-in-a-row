@@ -11,12 +11,14 @@ import kotlin.math.min
 class GameFieldFieldView(val gameField: GameField, val canvas: Canvas): InterfaceGameFieldView {
 
      var jewelSizeInPixels = 0.0
-    override fun draw() {
+
+    override fun update() {
         clear()
         drawGameField()
     }
 
     override fun drawGameField() {
+
         val arr = gameField.jewelArray
 //        val gc = canvas.graphicsContext2D
 
@@ -36,9 +38,13 @@ class GameFieldFieldView(val gameField: GameField, val canvas: Canvas): Interfac
     override fun drawOneJewel(i: Int, j: Int) {        //////????????????????????
         //// НОРМАЛЬНО ЛИ ЭТО КАЖДЫЙ РАЗ ДОСТАВАТЬ ГЦ????
         val gc = canvas.graphicsContext2D
+        val element = gameField.jewelArray[i][j]
 
-        gc.drawImage(gameField.jewelArray[i][j].texture,
-            j*jewelSizeInPixels, i*jewelSizeInPixels, jewelSizeInPixels, jewelSizeInPixels)
+        if(element != null) {
+            gc.drawImage(element.texture,
+                j*jewelSizeInPixels, i*jewelSizeInPixels, jewelSizeInPixels, jewelSizeInPixels)
+        }
+
     }
 
     fun drawTwoJewels(jewel1ij: Pair<Int, Int>,jewel2ij: Pair<Int, Int>) {

@@ -1,16 +1,42 @@
 package com.example.threeinarow.game
 
+import com.example.threeinarow.game.logic.MatrixProcessor
+import com.example.threeinarow.gameFieldObjects.jewel.Jewel
+import com.example.threeinarow.gameFieldObjects.jewel.SimpleJewel
+import com.example.threeinarow.gameFieldObjects.jewel.Colors.*
+import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
+import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.Test
+
 class MatrixScannerTest {
 
-//    var matrix = arrayOf(
-//        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("B"), SimpleJewel("B"), SimpleJewel("C")),
-//        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("W"), SimpleJewel("B")),
-//        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("W"), SimpleJewel("B")),
-//        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("W"), SimpleJewel("B")),
-//        arrayOf<Jewel?>(SimpleJewel("B"), SimpleJewel("R"), SimpleJewel("R"), SimpleJewel("B")) )
-//
-//        val scann = MatrixProcessor(this.matrix)
 
+
+
+    @Test
+    fun testFallDown() {
+        var matrix = arrayOf(
+            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), null, ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), null, null, ),
+            arrayOf<Jewel?>(null, null, SimpleJewel(GREEN), ) )
+
+        val scann = MatrixProcessor(matrix)
+
+
+
+        val expected = arrayOf(
+            arrayOf<Jewel?>(null, null, null, ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), null, null, ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), ) )
+
+        scann.fallDown()
+        scann.printMatrix()
+        assertArrayEquals(expected, matrix)
+    }
 
 
 //    @Test
