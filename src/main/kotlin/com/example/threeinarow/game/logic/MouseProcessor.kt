@@ -35,14 +35,8 @@ class MouseProcessor(
                     /// ПОЧЕМУ НА ЭТОМ КУСКЕ КОДА НЕ СРАБАТЫВАЕТ ВТОРАЯ ОБВОДКА??????????????????????????????????
                     if (checkNeighbours()==true) {
                         //// вызвать обмен двух камней
-//                        Thread.sleep(500)
-                        view.drawTwoJewels(jewel1ij, jewel2ij)
                         matrixProcessor.swapTwoJewels(jewel1ij, jewel2ij)
-                        //// поменять их местами на рисунке
-                    } else {
-//                        Thread.sleep(500)  /// НОРМАЛЬНО ЛИ ПИСАТЬ ТАК ИЛИ МОЖНО ПАУЗУ ПО ДРУГОМУ????????????
-                        view.drawTwoJewels(jewel1ij, jewel2ij)
-                    }
+                    } else {view.update()}
 
                 }
             }

@@ -19,6 +19,4 @@ public abstract class SpecialJewel extends Jewel {
         this.activated = activated;
     }
 
-    public abstract void action();
-
 }

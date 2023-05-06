@@ -8,11 +8,10 @@ interface InterfaceMatrixProcessor {
     fun scanColumns()
     fun scanRows()
 
-    fun activateSpecialJewels ()
+    fun activateALLSpecialJewels ()
 
-    fun containsNull () :Boolean
     fun fallDown ()
     fun randomJewelGeneration(): Jewel
     fun swapTwoJewels (firstJewel :Pair<Int, Int>, secondJewel :Pair<Int, Int>)
-//      НАДО ЕЩЁ ФУНКЦИЮ ДЛЯ ГЕНЕРАЦИИ РАНДОМНЫХ КАМНЕЙ И ПОПУТНОГО ОПУСКАНИЯ ИХ ВНИЗ
+
 }

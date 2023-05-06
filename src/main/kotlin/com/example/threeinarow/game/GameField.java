@@ -25,7 +25,11 @@ public class GameField {
         this(verticalSize, horizontalSize, new Jewel[verticalSize][horizontalSize]);
     }
 
-
+    public GameField(Jewel[][] jewelArray) {
+        this.jewelArray = jewelArray;
+        this.horizontalSize = jewelArray[0].length;
+        this.verticalSize = jewelArray.length;
+    }
 
     public GameField() {
         this(10, 10);

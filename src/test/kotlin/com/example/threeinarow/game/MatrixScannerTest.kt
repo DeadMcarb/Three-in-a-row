@@ -5,6 +5,12 @@ import com.example.threeinarow.gameFieldObjects.jewel.Jewel
 import com.example.threeinarow.gameFieldObjects.jewel.SimpleJewel
 import com.example.threeinarow.gameFieldObjects.jewel.Colors.*
 import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
+import com.example.threeinarow.gameFieldObjects.jewel.special.HorizontalLineDestroyer
+import com.example.threeinarow.gameFieldObjects.jewel.special.SameColorDestroyer
+import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
+import com.example.threeinarow.view.GameFieldFieldView
+import com.example.threeinarow.view.LabelView.ScoreView
+import javafx.scene.canvas.Canvas
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Test
 
@@ -14,26 +20,31 @@ class MatrixScannerTest {
 
 
     @Test
-    fun testFallDown() {
+    fun testActivateSpecialJewel() {
         var matrix = arrayOf(
-            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), null, ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), VerticalLineDestroyer(YELLOW), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), SameColorDestroyer(YELLOW), SimpleJewel(GREEN), ),
             arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), null, null, ),
-            arrayOf<Jewel?>(null, null, SimpleJewel(GREEN), ) )
+            arrayOf<Jewel?>(Bomb(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), ) )
 
-        val scann = MatrixProcessor(matrix)
+
+
+        val game = Game(GameField(matrix), 160)
+        val canvas = Canvas()
+        val scann = MatrixProcessor(game, GameFieldFieldView(GameField(matrix), canvas), ScoreView())
 
 
 
         val expected = arrayOf(
-            arrayOf<Jewel?>(null, null, null, ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), null, null, ),
             arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), ) )
+            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ) )
 
-        scann.fallDown()
+
+        scann.activateALLSpecialJewels()
         scann.printMatrix()
         assertArrayEquals(expected, matrix)
     }

@@ -1,5 +1,6 @@
 package com.example.threeinarow.game.logic
 
+import com.example.threeinarow.game.Game
 import com.example.threeinarow.gameFieldObjects.jewel.Colors
 import com.example.threeinarow.gameFieldObjects.jewel.Jewel
 import com.example.threeinarow.gameFieldObjects.jewel.SimpleJewel
@@ -9,62 +10,247 @@ import com.example.threeinarow.gameFieldObjects.jewel.special.SameColorDestroyer
 import com.example.threeinarow.gameFieldObjects.jewel.special.SpecialJewel
 import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
 import com.example.threeinarow.view.GameFieldFieldView
+import com.example.threeinarow.view.LabelView.ScoreView
 
 
 class MatrixProcessor(
-    private var arr: Array<Array<Jewel?>>,
-    private val view: GameFieldFieldView)
+    game: Game,
+    private val fieldView: GameFieldFieldView,
+    private val scoreView: ScoreView,
+    )
     : InterfaceMatrixProcessor {
-
-//    public comboCounter: Int = 0
+    private val arr: Array<Array<Jewel?>> = game.gameField.jewelArray
+    private var score: Int = game.score
+    private var comboCounter: Int = 0
 
 
     ////////////////////////////////////////////////////////////////////////////
+    fun printMatrix() {
+        for (i in arr.indices) {
+            for (j in arr[0].indices) {
+                if (arr[i][j] == null) print("null ") else {
+                    when(arr[i][j]!!) {
+                        is SimpleJewel -> {
+                            print("  ${arr[i][j]!!.color}  ")
+                        }
+
+                        is VerticalLineDestroyer -> {
+                            print("Vert ")
+                        }
+
+                        is HorizontalLineDestroyer -> {
+                            print("Hori ")
+                        }
+
+                        is SameColorDestroyer -> {
+                            print("Same ")
+                        }
+
+                        is Bomb -> {
+                            print("Bomb ")
+                        }
+                    }
+                }
+            }
+            println()
+        }
+        println("....................................")
+    }
+
     override fun swapTwoJewels(firstJewel :Pair<Int, Int>, secondJewel :Pair<Int, Int>) {
         val i1 = firstJewel.first
         val j1 = firstJewel.second
         val i2 = secondJewel.first
         val j2 = secondJewel.second
 
+        //поменять местами в матрице
         arr[i1][j1] = arr [i2][j2].also { arr[i2][j2] = arr [i1][j1] }
+        //поменять местами на рисунке
+        fieldView.drawTwoJewels(firstJewel, secondJewel)
+//        Thread.sleep(5000)
 
-
-        // ЕСЛИ МЕНЯЮТСЯ МЕСТАМИ ДВА СПЕЦИАЛЬНЫХ, ТО ДОЛЖНА БЫТЬ ИХ ОСОБЕННАЯ АКТИВАЦИЯ, потом падение вниз
         fullScan()
+//        if (fullScan() == false) {
+//            arr[i1][j1] = arr [i2][j2].also { arr[i2][j2] = arr [i1][j1] }
+//            //поменять местами на рисунке
+//            fieldView.drawTwoJewels(firstJewel, secondJewel)
+//        }        // ЕСЛИ МЕНЯЮТСЯ МЕСТАМИ ДВА СПЕЦИАЛЬНЫХ, ТО ДОЛЖНА БЫТЬ ИХ ОСОБЕННАЯ АКТИВАЦИЯ, потом падение вниз
     }
 
 
 
     override fun fullScan() {
-        //1)Меняю камни местами
-        // НАДО ЕЩЁ ВЫЗВАТЬ ФУНКЦИЮ РИСОВАНИЯ ДЛЯ ЭТОГО ДЕЙСТВИЯ
 
-        //2)Функ. Проверки по вертикали и горизонтали. Выставление где надо activate = true
-        scanRows()
-        scanColumns()
-        // Надо чтоб они меняли счётчик комбо и возвращали булевское значение, отработали они или нет
-        // ЕСЛИ КРУГОМ ФОЛС, ТО ОТРИСОВАТЬ ПЕРВЫЙ ПУНКТ ВСПЯТЬ, А ИНАЧЕ:
+//        //2)Функ. Проверки по вертикали и горизонтали. Выставление где надо activate = true
+//        ScanRowsAndColumns()
+//        // Надо чтоб они меняли счётчик комбо
+//
+//        //3) Отрисовка
+//        printMatrix()
+//        fieldView.update()
+////        if (comboCounter>0) {
+////            fieldView.update()
+////        }
+//
+//        //4)Потом сканирую на наличие null значения,
+//        //если оно есть, то вызываю функ. Опускания и создания рандомных, и отрисовку
+//        fallDown()
+//        printMatrix()
+//        fieldView.update()
+////        activateSpecialJewels()
+//        //5) Срабатывание бомбы
 
-        //3) Отрисовка
 
 
-        //4)Потом сканирую на наличие null значения,
-        //если оно есть, то вызываю функ. Опускания и создания рандомных, и отрисовку
+        comboCounter = -1
 
-//        activateSpecialJewels()
-        //5) Срабатывание бомбы
+        while (comboCounter != 0 ) {
+            comboCounter = 0
+            ScanRowsAndColumns()
+            printMatrix()
+            fieldView.update()
 
-        fallDown()
+            fallDown()
+            printMatrix()
+            fieldView.update()
+
+            activateALLSpecialJewels()
+            printMatrix()
+            fieldView.update()
+
+            fallDown()
+            printMatrix()
+            fieldView.update()
+        }
     }
 
 
 
+    fun ScanRowsAndColumns() {
+        scanRows()
+        scanColumns()
+    }
 
 
-    override fun containsNull():Boolean { //+++++++++++++++++++++++++++++++++++++++
-        for (i in arr.indices) {
-            for (j in arr[0].indices) {
-                if (arr[i][j]==null) {
+
+//    override fun containsNull():Boolean { //+++++++++++++++++++++++++++++++++++++++
+//        for (i in arr.indices) {
+//            for (j in arr[0].indices) {
+//                if (arr[i][j]==null) {
+//                    return true
+//                }
+//            }
+//        }
+//        return false
+//    }
+
+    //    ++++++++++++++++++
+    override fun activateALLSpecialJewels() {
+        var activatedJewelsCount = -1
+
+        while (activatedJewelsCount != 0) {
+            activatedJewelsCount = 0
+            for (i in arr.indices) {
+                for (j in arr[0].indices) {
+                    if (arr[i][j] is SpecialJewel) {
+                        if (activateSpecialJewel (i, j)) activatedJewelsCount++
+                    }
+                }
+            }
+        }
+    }
+
+    //    ++++++++++++++++++
+    fun activateSpecialJewel (i: Int, j: Int): Boolean {
+        val element = arr[i][j]
+        when (element) {
+            is VerticalLineDestroyer -> {
+
+                if (element.isActivated) {
+                    //активатор удаляет стрелу или бомбу вручную
+                    arr[i][j] = null
+                    score += 10
+                    scoreView.update()
+
+                    for (e in arr.indices) {
+                        deleteJevelOrWhatever(e, j)
+                    }
+
+                    return true
+                }
+            }
+
+            is HorizontalLineDestroyer -> {
+
+                if (element.isActivated) {
+
+                    arr[i][j] = null
+                    score += 10
+                    scoreView.update()
+
+                    for (e in arr[0].indices) {
+                        deleteJevelOrWhatever(i, e)
+                    }
+
+                    return true
+                }
+            }
+
+            is SameColorDestroyer -> {
+
+                if (element.isActivated) {
+
+                    arr[i][j] = null
+                    score += 10
+                    scoreView.update()
+
+                    for (i1 in arr.indices) {
+                        for (j1 in arr[0].indices) {
+                            if (element.equals(arr[i1][j1])) {
+                                deleteJevelOrWhatever (i1, j1)
+                            }
+                        }
+                    }
+
+                    return true
+                }
+            }
+
+            is Bomb -> {
+
+                if (element.isActivated) {
+
+                    arr[i][j] = null
+                    score += 10
+                    scoreView.update()
+
+                    // проверка четірёх диагоналей квадрата 3 на 3
+
+                    // левый верхний
+                    if (! isBombExplosionBehindGameField(i-1, j-1)) {
+                        deleteJevelOrWhatever (i-1, j-1)
+                        deleteJevelOrWhatever (i, j-1)
+                        deleteJevelOrWhatever (i-1, j)
+                    }
+                    // правый нижний
+                    if (! isBombExplosionBehindGameField(i+1, j+1)) {
+                        deleteJevelOrWhatever (i+1, j+1)
+                        deleteJevelOrWhatever (i, j+1)
+                        deleteJevelOrWhatever (i+1, j)
+                    }
+                    // левый нижний
+                    if (! isBombExplosionBehindGameField(i+1, j-1)) {
+                        deleteJevelOrWhatever (i+1, j-1)
+                        deleteJevelOrWhatever (i, j-1)
+                        deleteJevelOrWhatever (i+1, j)
+                    }
+                    // правый верхний
+                    if (! isBombExplosionBehindGameField(i-1, j+1)) {
+                        deleteJevelOrWhatever (i-1, j+1)
+                        deleteJevelOrWhatever (i, j+1)
+                        deleteJevelOrWhatever (i-1, j)
+                    }
+
                     return true
                 }
             }
@@ -72,8 +258,24 @@ class MatrixProcessor(
         return false
     }
 
-    override fun activateSpecialJewels() {
-        TODO("Not yet implemented")
+
+    private fun isBombExplosionBehindGameField(i1: Int, j1: Int): Boolean {
+        return ((i1 > arr.size-1 || i1 < 0) || (j1 > arr.size-1 || j1 < 0))
+    }
+
+
+
+    private fun deleteJevelOrWhatever(i:Int, j:Int, whatToPutHere: Jewel? = null) {
+        if (arr[i][j]!= null) {
+            if (arr[i][j] is SpecialJewel) {
+                (arr[i][j] as SpecialJewel).isActivated = true
+            } else {
+                arr[i][j] = whatToPutHere
+
+                score += 10
+                scoreView.update()
+            }
+        }
     }
 
     override fun fallDown() {
@@ -134,14 +336,17 @@ class MatrixProcessor(
             }
         }
 
-    printMatrix()
     }
 
     private fun howManyInColumn(count: Int, startPoint: Pair<Int, Int>) {
-        when (count) {
-            5 -> fiveInARowVertically(startPoint)
-            4 -> fourInARowVertically(startPoint)
-            3 -> threeInARowVertically(startPoint)
+        if (count>=3) {
+            comboCounter ++
+
+            when (count) {
+                5 -> fiveInARowVertically(startPoint)
+                4 -> fourInARowVertically(startPoint)
+                3 -> threeInARowVertically(startPoint)
+            }
         }
     }
 
@@ -210,25 +415,20 @@ class MatrixProcessor(
             }
         }
     }
-        printMatrix()
+
 }
 
     private fun howManyInRow(count: Int, startPoint: Pair<Int, Int>) {
-        when (count) {
-            5 -> fiveInARowHorizontally(startPoint)
-            4 -> fourInARowHorizontally(startPoint)
-            3 -> if (createBomb(startPoint) == false) {
-                threeInARowHorizontally(startPoint)
-            }
-        }
-    }
+        if (count>=3) {
+            comboCounter ++
 
-    public fun printMatrix() {
-        for (i in arr.indices) {
-            for (j in arr[0].indices) {
-                if (arr[i][j] == null) print("null ") else print(" ${arr[i][j]!!.color}   ")
+            when (count) {
+                5 -> fiveInARowHorizontally(startPoint)
+                4 -> fourInARowHorizontally(startPoint)
+                3 -> if (createBomb(startPoint) == false) {
+                    threeInARowHorizontally(startPoint)
+                }
             }
-            println()
         }
     }
 
@@ -266,13 +466,6 @@ class MatrixProcessor(
     }
 
 
-    private fun deleteJevelOrWhatever(i:Int, j:Int, whatToPutHere: Jewel? = null) {
-        if (arr[i][j] is SpecialJewel) {
-            (arr[i][j] as SpecialJewel).isActivated = true
-        } else arr[i][j] = whatToPutHere
-
-    }
-
     private fun threeInARowHorizontally(startPoint: Pair<Int, Int>) {
         val i = startPoint.first
         var j = startPoint.second
@@ -281,7 +474,7 @@ class MatrixProcessor(
             j++
         }
     }
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 
     private fun fourInARowHorizontally(startPoint: Pair<Int, Int>) {
@@ -294,7 +487,7 @@ class MatrixProcessor(
         deleteJevelOrWhatever(i,j+3)
 
     }
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
     private fun fiveInARowHorizontally(startPoint: Pair<Int, Int>){
         val i = startPoint.first
@@ -306,7 +499,7 @@ class MatrixProcessor(
         deleteJevelOrWhatever(i,j+3)
         deleteJevelOrWhatever(i,j+4)
     }
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 
 

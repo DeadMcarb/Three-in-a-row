@@ -23,6 +23,14 @@ public class Game {
     }
 
 
+    public GameField getGameField() {
+        return gameField;
+    }
+
+    public void setGameField(GameField gameField) {
+        this.gameField = gameField;
+    }
+
     public void setScore(int score) {
         this.score = score;
     }

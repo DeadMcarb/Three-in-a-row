@@ -25,6 +25,10 @@ public abstract class Jewel {
         }
     }
 
+    public void setTexture(Image texture) {
+        this.texture = texture;
+    }
+
     public Image getTexture() {
         return texture;
     }

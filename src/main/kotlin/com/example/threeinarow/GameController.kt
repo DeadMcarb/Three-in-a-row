@@ -16,6 +16,11 @@ import javafx.scene.layout.Pane
 
 ///ИМПОРТ ЦВЕТОВ СИМВОЛЬНЫХ
 import com.example.threeinarow.gameFieldObjects.jewel.Colors.*
+import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
+import com.example.threeinarow.gameFieldObjects.jewel.special.HorizontalLineDestroyer
+import com.example.threeinarow.gameFieldObjects.jewel.special.SameColorDestroyer
+import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
+import com.example.threeinarow.view.LabelView.ScoreView
 import javafx.scene.input.MouseButton
 
 
@@ -29,16 +34,15 @@ class GameController {
 
     private lateinit var game: Game
     private lateinit var gameField: GameField
-    private lateinit var view: GameFieldFieldView
+    private lateinit var gameFieldFieldView: GameFieldFieldView
     private lateinit var matixScanner: InterfaceMatrixProcessor
     private lateinit var mouseProcessor: InterfaceMouseProcessor
 
     var matrix = arrayOf(
-        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(BlUE), SimpleJewel(BlUE), SimpleJewel(BlUE)),
+        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(YELLOW), SimpleJewel(BlUE), SimpleJewel(BlUE)),
+        arrayOf<Jewel?>(SimpleJewel(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), SimpleJewel(RED)),
         arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), SimpleJewel(BlUE)),
-        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), SimpleJewel(BlUE)),
-        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), SimpleJewel(BlUE)),
-        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(YELLOW), SimpleJewel(YELLOW), SimpleJewel(YELLOW)) )
+        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(YELLOW), SimpleJewel(BlUE), SimpleJewel(YELLOW)) )
     fun initialize(){
         canvas.widthProperty().bind(pane.widthProperty())
         canvas.heightProperty().bind(pane.heightProperty())
@@ -47,20 +51,21 @@ class GameController {
         gameField = GameField(matrix.size,matrix[0].size, matrix)
         game = Game(gameField, 1500)
         //////////////////////////////////////////////////////////////////////
-        view = GameFieldFieldView(gameField, canvas)
-        matixScanner = MatrixProcessor(gameField.jewelArray)
+        gameFieldFieldView = GameFieldFieldView(gameField, canvas)
+        val scoreView = ScoreView()
+        matixScanner = MatrixProcessor(game, gameFieldFieldView, scoreView)
 
 
 
-        canvas.widthProperty().addListener { _ -> view.update() } // добавить сюда абдейт и других вьювов
-        canvas.heightProperty().addListener { _ -> view.update() }
+        canvas.widthProperty().addListener { _ -> gameFieldFieldView.update() } // добавить сюда абдейт и других вьювов
+        canvas.heightProperty().addListener { _ -> gameFieldFieldView.update() }
 
         pane.requestFocus()
 
         ///////////////////////
-        view.update()
+        gameFieldFieldView.update()
 
-        mouseProcessor = MouseProcessor(gameField, view, matixScanner)
+        mouseProcessor = MouseProcessor(gameField, gameFieldFieldView, matixScanner)
 
 
     }
