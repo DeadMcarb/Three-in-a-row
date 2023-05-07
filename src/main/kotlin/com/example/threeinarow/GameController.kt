@@ -49,24 +49,31 @@ class GameController {
     private lateinit var matixScanner: InterfaceMatrixProcessor
     private lateinit var mouseProcessor: InterfaceMouseProcessor
 
-    var matrix = arrayOf(
-        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(YELLOW), SimpleJewel(BlUE), SimpleJewel(BlUE)),
-        arrayOf<Jewel?>(SimpleJewel(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), SimpleJewel(RED)),
-        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), SimpleJewel(BlUE)),
-        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(YELLOW), SimpleJewel(BlUE), SimpleJewel(YELLOW)) )
+
+    var matrix : Array<Array<Jewel?>> = Array(10, { Array(10, {null}) })
+//    var matrix = arrayOf(
+//        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(YELLOW), SimpleJewel(BlUE), SimpleJewel(BlUE)),
+//        arrayOf<Jewel?>(SimpleJewel(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), SimpleJewel(RED)),
+//        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), SimpleJewel(BlUE)),
+//        arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(YELLOW), SimpleJewel(BlUE), SimpleJewel(YELLOW)) )
     fun initialize(){
         canvas.widthProperty().bind(pane.widthProperty())
         canvas.heightProperty().bind(pane.heightProperty())
 
 
 
+
+
         game = Game(GameField(matrix), 5)
+
 
         gameFieldView = GameFieldFieldView(game, canvas)
         scoreView = ScoreView(game, scoreLabel)
         movesLeftView = MovesLeftView(game, movesLeftLabel)
 
         matixScanner = MatrixProcessor(game, gameFieldView, scoreView, movesLeftView)
+
+    matixScanner.randomFill()
 
 
 

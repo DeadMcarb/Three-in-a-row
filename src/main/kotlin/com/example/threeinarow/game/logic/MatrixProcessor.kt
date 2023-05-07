@@ -61,6 +61,42 @@ class MatrixProcessor(
         println("....................................")
     }
 
+     override fun randomFill() {
+         for (j in arr[0].indices) {
+             for (i in arr.indices) {
+                 arr[i][j] = randomJewelGeneration()
+             }
+         }
+
+         fullScan()
+         game.zeroScore()
+
+
+//        for (j in arr[0].indices) {
+//            for (i in arr.indices) {
+//
+////проверяет точки слева и справа данной, не выходят ли они за поле и совпадают ли с даной
+//                if ((!isBombExplosionBehindGameField(i, j - 1))
+//                    && (!isBombExplosionBehindGameField(i, j + 1))
+//                    && arr[i][j]!! == arr[i][j - 1]
+//                    && arr[i][j]!! == arr[i][j + 1])  {
+//
+//                    arr[i][j] = randomJewelGeneration()
+//                }
+//
+////проверяет точки сверху и снизу данной, не выходят ли они за поле и совпадают ли с даной
+//                if ((!isBombExplosionBehindGameField(i - 1, j))
+//                    && (!isBombExplosionBehindGameField(i + 1, j))
+//                    && arr[i][j]!! == arr[i - 1][j]
+//                    && arr[i][j]!! == arr[i + 1][j]) {
+//
+//                    arr[i][j] = randomJewelGeneration()
+//                }
+//            }
+//        }
+    }
+
+
     override fun swapTwoJewels(firstJewel :Pair<Int, Int>, secondJewel :Pair<Int, Int>) {
         val i1 = firstJewel.first
         val j1 = firstJewel.second
@@ -69,6 +105,7 @@ class MatrixProcessor(
 
         //поменять местами в матрице
         arr[i1][j1] = arr [i2][j2].also { arr[i2][j2] = arr [i1][j1] }
+
         //поменять местами на рисунке
         fieldView.drawTwoJewels(firstJewel, secondJewel)
 //        Thread.sleep(5000)
@@ -87,26 +124,6 @@ class MatrixProcessor(
 
 
     override fun fullScan():Boolean {
-
-//        //2)Функ. Проверки по вертикали и горизонтали. Выставление где надо activate = true
-//        ScanRowsAndColumns()
-//        // Надо чтоб они меняли счётчик комбо
-//
-//        //3) Отрисовка
-//        printMatrix()
-//        fieldView.update()
-////        if (comboCounter>0) {
-////            fieldView.update()
-////        }
-//
-//        //4)Потом сканирую на наличие null значения,
-//        //если оно есть, то вызываю функ. Опускания и создания рандомных, и отрисовку
-//        fallDown()
-//        printMatrix()
-//        fieldView.update()
-////        activateSpecialJewels()
-//        //5) Срабатывание бомбы
-
 
         var comboCounterOfEntireMove = 0
 
@@ -143,20 +160,6 @@ class MatrixProcessor(
         scanColumns()
     }
 
-
-
-//    override fun containsNull():Boolean { //+++++++++++++++++++++++++++++++++++++++
-//        for (i in arr.indices) {
-//            for (j in arr[0].indices) {
-//                if (arr[i][j]==null) {
-//                    return true
-//                }
-//            }
-//        }
-//        return false
-//    }
-
-    //    ++++++++++++++++++
     override fun activateALLSpecialJewels() {
         var activatedJewelsCount = -1
 

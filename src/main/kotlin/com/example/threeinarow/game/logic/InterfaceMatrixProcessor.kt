@@ -14,4 +14,6 @@ interface InterfaceMatrixProcessor {
     fun randomJewelGeneration(): Jewel
     fun swapTwoJewels (firstJewel :Pair<Int, Int>, secondJewel :Pair<Int, Int>)
 
+    fun randomFill()
+
 }

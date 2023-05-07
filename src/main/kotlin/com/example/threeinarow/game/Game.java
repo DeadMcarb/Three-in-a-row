@@ -18,6 +18,10 @@ public class Game {
         defeatCheck();
     }
 
+    public void zeroScore() {
+        score = 0;
+    }
+
     public void movesLeftDecrease() {
         movesLeft--;
         defeatCheck();
