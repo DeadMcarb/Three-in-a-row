@@ -4,7 +4,7 @@ import com.example.threeinarow.gameFieldObjects.jewel.Jewel
 
 interface InterfaceMatrixProcessor {
 
-    fun fullScan()
+    fun fullScan():Boolean
     fun scanColumns()
     fun scanRows()
 

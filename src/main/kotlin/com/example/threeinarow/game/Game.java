@@ -1,25 +1,52 @@
 package com.example.threeinarow.game;
 
-import com.example.threeinarow.gameFieldObjects.jewel.Jewel;
+import javafx.scene.control.Alert;
 
 public class Game {
 
     private GameField gameField;
 
     private int score;
-    //За каждый элемент в списке для удаления будет давать n очков
 
-    private int timeLeft;
+    private int movesLeft;
 
-    public Game(GameField gameField, int timeLeft) {
-        this.gameField = gameField;
-        this.score = 0;
-        this.timeLeft = timeLeft;
+    private boolean running = true;
+
+
+    public void scoreIncrease(int howMuchToAdd) {
+        score += howMuchToAdd;
+        defeatCheck();
     }
 
-    public Game(int verticalSize, int horizontalSize, int timeLeft) {
+    public void movesLeftDecrease() {
+        movesLeft--;
+        defeatCheck();
+    }
+    private void defeatCheck() {
+        if (movesLeft==0) {
+            running = false;
 
-        this(new GameField(verticalSize, horizontalSize), timeLeft);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Game over!");
+            alert.setTitle("Snake game");
+            alert.setHeaderText(null);
+            alert.show();
+        }
+    }
+
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public Game(GameField gameField, int movesLeft) {
+        this.gameField = gameField;
+        this.score = 0;
+        this.movesLeft = movesLeft;
+    }
+
+    public Game(int verticalSize, int horizontalSize, int movesLeft) {
+
+        this(new GameField(verticalSize, horizontalSize), movesLeft);
     }
 
 
@@ -35,15 +62,15 @@ public class Game {
         this.score = score;
     }
 
-    public void setTimeLeft(int timeLeft) {
-        this.timeLeft = timeLeft;
+    public void setMovesLeft(int movesLeft) {
+        this.movesLeft = movesLeft;
     }
 
     public int getScore() {
         return score;
     }
 
-    public int getTimeLeft() {
-        return timeLeft;
+    public int getMovesLeft() {
+        return movesLeft;
     }
 }

@@ -10,17 +10,21 @@ import com.example.threeinarow.gameFieldObjects.jewel.special.SameColorDestroyer
 import com.example.threeinarow.gameFieldObjects.jewel.special.SpecialJewel
 import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
 import com.example.threeinarow.view.GameFieldFieldView
+import com.example.threeinarow.view.LabelView.MovesLeftView
 import com.example.threeinarow.view.LabelView.ScoreView
+import com.example.threeinarow.view.LabelView.View
 
 
 class MatrixProcessor(
-    game: Game,
+    private val game: Game,
     private val fieldView: GameFieldFieldView,
-    private val scoreView: ScoreView,
+    private val scoreView: View,
+    private val movesLeftView: View,
     )
     : InterfaceMatrixProcessor {
     private val arr: Array<Array<Jewel?>> = game.gameField.jewelArray
     private var score: Int = game.score
+
     private var comboCounter: Int = 0
 
 
@@ -68,18 +72,21 @@ class MatrixProcessor(
         //поменять местами на рисунке
         fieldView.drawTwoJewels(firstJewel, secondJewel)
 //        Thread.sleep(5000)
+        // ЕСЛИ МЕНЯЮТСЯ МЕСТАМИ ДВА СПЕЦИАЛЬНЫХ, ТО ДОЛЖНА БЫТЬ ИХ ОСОБЕННАЯ АКТИВАЦИЯ, потом падение вниз
 
-        fullScan()
-//        if (fullScan() == false) {
-//            arr[i1][j1] = arr [i2][j2].also { arr[i2][j2] = arr [i1][j1] }
-//            //поменять местами на рисунке
-//            fieldView.drawTwoJewels(firstJewel, secondJewel)
-//        }        // ЕСЛИ МЕНЯЮТСЯ МЕСТАМИ ДВА СПЕЦИАЛЬНЫХ, ТО ДОЛЖНА БЫТЬ ИХ ОСОБЕННАЯ АКТИВАЦИЯ, потом падение вниз
+        if (fullScan()) {
+            game.movesLeftDecrease()
+            movesLeftView.update()
+        } else {
+            arr[i1][j1] = arr [i2][j2].also { arr[i2][j2] = arr [i1][j1] }
+            //поменять местами на рисунке
+            fieldView.drawTwoJewels(firstJewel, secondJewel)
+        }
     }
 
 
 
-    override fun fullScan() {
+    override fun fullScan():Boolean {
 
 //        //2)Функ. Проверки по вертикали и горизонтали. Выставление где надо activate = true
 //        ScanRowsAndColumns()
@@ -101,6 +108,7 @@ class MatrixProcessor(
 //        //5) Срабатывание бомбы
 
 
+        var comboCounterOfEntireMove = 0
 
         comboCounter = -1
 
@@ -121,7 +129,11 @@ class MatrixProcessor(
             fallDown()
             printMatrix()
             fieldView.update()
+
+            comboCounterOfEntireMove += comboCounter
         }
+
+        return comboCounterOfEntireMove>0
     }
 
 
@@ -169,7 +181,7 @@ class MatrixProcessor(
                 if (element.isActivated) {
                     //активатор удаляет стрелу или бомбу вручную
                     arr[i][j] = null
-                    score += 10
+                    game.scoreIncrease(10)
                     scoreView.update()
 
                     for (e in arr.indices) {
@@ -185,7 +197,7 @@ class MatrixProcessor(
                 if (element.isActivated) {
 
                     arr[i][j] = null
-                    score += 10
+                    game.scoreIncrease(10)
                     scoreView.update()
 
                     for (e in arr[0].indices) {
@@ -201,7 +213,7 @@ class MatrixProcessor(
                 if (element.isActivated) {
 
                     arr[i][j] = null
-                    score += 10
+                    game.scoreIncrease(10)
                     scoreView.update()
 
                     for (i1 in arr.indices) {
@@ -221,7 +233,7 @@ class MatrixProcessor(
                 if (element.isActivated) {
 
                     arr[i][j] = null
-                    score += 10
+                    game.scoreIncrease(10)
                     scoreView.update()
 
                     // проверка четірёх диагоналей квадрата 3 на 3
@@ -272,7 +284,7 @@ class MatrixProcessor(
             } else {
                 arr[i][j] = whatToPutHere
 
-                score += 10
+                game.scoreIncrease(10)
                 scoreView.update()
             }
         }

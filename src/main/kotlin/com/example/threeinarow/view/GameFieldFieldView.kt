@@ -8,9 +8,10 @@ import javafx.scene.paint.Color.*
 import kotlin.math.min
 
 
-class GameFieldFieldView(val gameField: GameField, val canvas: Canvas): InterfaceGameFieldView {
+class GameFieldFieldView(game: Game, private val canvas: Canvas): InterfaceGameFieldView {
 
-     var jewelSizeInPixels = 0.0
+    private val gameField = game.gameField
+    var jewelSizeInPixels = 0.0
 
     override fun update() {
         clear()

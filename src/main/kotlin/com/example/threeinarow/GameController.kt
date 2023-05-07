@@ -20,21 +20,32 @@ import com.example.threeinarow.gameFieldObjects.jewel.special.Bomb
 import com.example.threeinarow.gameFieldObjects.jewel.special.HorizontalLineDestroyer
 import com.example.threeinarow.gameFieldObjects.jewel.special.SameColorDestroyer
 import com.example.threeinarow.gameFieldObjects.jewel.special.VerticalLineDestroyer
+import com.example.threeinarow.view.LabelView.MovesLeftView
 import com.example.threeinarow.view.LabelView.ScoreView
+import com.example.threeinarow.view.LabelView.View
+import javafx.scene.control.Label
 import javafx.scene.input.MouseButton
 
 
 class GameController {
 
     @FXML
-    private lateinit var canvas: Canvas
+    private lateinit var scoreLabel: Label
+    @FXML
+    private lateinit var movesLeftLabel: Label
 
+    @FXML
+    private lateinit var canvas: Canvas
     @FXML
     private lateinit var pane: Pane
 
+
     private lateinit var game: Game
-    private lateinit var gameField: GameField
-    private lateinit var gameFieldFieldView: GameFieldFieldView
+
+    private lateinit var gameFieldView: GameFieldFieldView
+    private lateinit var scoreView: View
+    private lateinit var movesLeftView: View
+
     private lateinit var matixScanner: InterfaceMatrixProcessor
     private lateinit var mouseProcessor: InterfaceMouseProcessor
 
@@ -47,32 +58,43 @@ class GameController {
         canvas.widthProperty().bind(pane.widthProperty())
         canvas.heightProperty().bind(pane.heightProperty())
 
-//        game = Game()/////////////////////////////////////////
-        gameField = GameField(matrix.size,matrix[0].size, matrix)
-        game = Game(gameField, 1500)
-        //////////////////////////////////////////////////////////////////////
-        gameFieldFieldView = GameFieldFieldView(gameField, canvas)
-        val scoreView = ScoreView()
-        matixScanner = MatrixProcessor(game, gameFieldFieldView, scoreView)
+
+
+        game = Game(GameField(matrix), 5)
+
+        gameFieldView = GameFieldFieldView(game, canvas)
+        scoreView = ScoreView(game, scoreLabel)
+        movesLeftView = MovesLeftView(game, movesLeftLabel)
+
+        matixScanner = MatrixProcessor(game, gameFieldView, scoreView, movesLeftView)
 
 
 
-        canvas.widthProperty().addListener { _ -> gameFieldFieldView.update() } // добавить сюда абдейт и других вьювов
-        canvas.heightProperty().addListener { _ -> gameFieldFieldView.update() }
+        canvas.widthProperty().addListener { _ ->
+            gameFieldView.update()
+            scoreView.update()
+            movesLeftView.update()
+        }
+
+        canvas.heightProperty().addListener { _ ->
+            gameFieldView.update()
+            scoreView.update()
+            movesLeftView.update()
+        }
 
         pane.requestFocus()
 
-        ///////////////////////
-        gameFieldFieldView.update()
 
-        mouseProcessor = MouseProcessor(gameField, gameFieldFieldView, matixScanner)
+        mouseProcessor = MouseProcessor(game.gameField, gameFieldView, matixScanner)
 
 
     }
 
     fun processMouseClick(mouseEvent: MouseEvent) {
-        if (mouseEvent.button == MouseButton.PRIMARY) {
-            mouseProcessor.process(mouseEvent.x, mouseEvent.y)
+        if (game.isRunning) {
+            if (mouseEvent.button == MouseButton.PRIMARY) {
+                mouseProcessor.process(mouseEvent.x, mouseEvent.y)
+            }
         }
     }
 

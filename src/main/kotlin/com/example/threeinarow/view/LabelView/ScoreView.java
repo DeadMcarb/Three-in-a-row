@@ -1,18 +1,20 @@
 package com.example.threeinarow.view.LabelView;
 
+import com.example.threeinarow.game.Game;
+import javafx.scene.control.Label;
+
 public class ScoreView implements View {
 
-//    private SnakeGame game;
-//    private Label score;
-//
-//    public ScoreView(SnakeGame game, Label score) {
-//        this.game = game;
-//        this.score = score;
-//    }
+    private Game game;
+    private Label scoreLabel;
+
+    public ScoreView(Game game, Label scoreLabel) {
+        this.game = game;
+        this.scoreLabel = scoreLabel;
+    }
 
     @Override
     public void update() {
-//        int size = game.getSnake().getBody().size();
-//        score.setText("Length = " + (size + 1));
+        scoreLabel.setText("Score: " + game.getScore());
     }
 }

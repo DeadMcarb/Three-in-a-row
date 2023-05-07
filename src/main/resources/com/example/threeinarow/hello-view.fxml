@@ -3,24 +3,38 @@
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.threeinarow.GameController">
    <center>
-       <Pane fx:id="pane" onMouseClicked="#processMouseClick" focusTraversable="true" prefHeight="400.0" prefWidth="400.0" BorderPane.alignment="CENTER">
-           <Canvas fx:id="canvas"  height="400.0" width="400.0" />
+       <Pane fx:id="pane" focusTraversable="true" onMouseClicked="#processMouseClick" prefHeight="400.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+           <Canvas fx:id="canvas" height="400.0" width="400.0" />
        </Pane>
    </center>
    <top>
        <MenuBar BorderPane.alignment="CENTER">
            <Menu mnemonicParsing="false" text="File">
-               <MenuItem mnemonicParsing="false" text="Close"/>
+               <MenuItem mnemonicParsing="false" text="Close" />
            </Menu>
            <Menu mnemonicParsing="false" text="Edit">
-               <MenuItem mnemonicParsing="false" text="Delete"/>
+               <MenuItem mnemonicParsing="false" text="Delete" />
            </Menu>
            <Menu mnemonicParsing="false" text="Help">
-               <MenuItem mnemonicParsing="false" text="About"/>
+               <MenuItem mnemonicParsing="false" text="About" />
            </Menu>
        </MenuBar>
    </top>
+   <right>
+       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+           <Label fx:id="scoreLabel" layoutX="14.0" layoutY="10.0" text="Score: ">
+            <font>
+               <Font size="20.0" />
+            </font></Label>
+           <Label fx:id="movesLeftLabel" layoutX="14.0" layoutY="50.0" text="Moves left: ">
+            <font>
+               <Font size="20.0" />
+            </font></Label>
+       </Pane>
+   </right>
+
 </BorderPane>

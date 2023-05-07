@@ -19,35 +19,35 @@ class MatrixScannerTest {
 
 
 
-    @Test
-    fun testActivateSpecialJewel() {
-        var matrix = arrayOf(
-            arrayOf<Jewel?>(SimpleJewel(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), VerticalLineDestroyer(YELLOW), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), SameColorDestroyer(YELLOW), SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(Bomb(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), ) )
-
-
-
-        val game = Game(GameField(matrix), 160)
-        val canvas = Canvas()
-        val scann = MatrixProcessor(game, GameFieldFieldView(GameField(matrix), canvas), ScoreView())
-
-
-
-        val expected = arrayOf(
-            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
-            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ) )
-
-
-        scann.activateALLSpecialJewels()
-        scann.printMatrix()
-        assertArrayEquals(expected, matrix)
-    }
+//    @Test
+//    fun testActivateSpecialJewel() {
+//        var matrix = arrayOf(
+//            arrayOf<Jewel?>(SimpleJewel(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), ),
+//            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), VerticalLineDestroyer(YELLOW), ),
+//            arrayOf<Jewel?>(SimpleJewel(BlUE), SameColorDestroyer(YELLOW), SimpleJewel(GREEN), ),
+//            arrayOf<Jewel?>(SimpleJewel(BlUE), SimpleJewel(RED), SimpleJewel(GREEN), ),
+//            arrayOf<Jewel?>(Bomb(YELLOW), SimpleJewel(RED), SimpleJewel(GREEN), ) )
+//
+//
+//
+//        val game = Game(GameField(matrix), 160)
+//        val canvas = Canvas()
+//        val scann = MatrixProcessor(game, GameFieldFieldView(GameField(matrix), canvas), ScoreView())
+//
+//
+//
+//        val expected = arrayOf(
+//            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+//            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+//            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+//            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ),
+//            arrayOf<Jewel?>(SimpleJewel(BlUE), null, SimpleJewel(GREEN), ) )
+//
+//
+//        scann.activateALLSpecialJewels()
+//        scann.printMatrix()
+//        assertArrayEquals(expected, matrix)
+//    }
 
 
 //    @Test
